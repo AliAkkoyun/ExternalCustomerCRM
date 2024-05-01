@@ -8,22 +8,21 @@ import org.hibernate.annotations.GenericGenerator
 
 @Entity
 @Table(name = "company")
-data class Company (
+data class Company @JvmOverloads constructor(
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    val id : String?,
-    val name: String?,
-    val commercialAgreement : String?,
+    val id : Long? = null,
+    val name: String? = null,
+    val commercialAgreement : String? = null,
 
     @OneToOne(fetch = FetchType.LAZY)
-    val companyNote : CompanyNote?,
-
+    val companyNote : CompanyNote? = null,
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
-    val contact : Set<Contact>?
+    val contact : Set<Contact>? = null
+
     )
 {
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -46,5 +45,9 @@ data class Company (
         result = 31 * result + (companyNote?.hashCode() ?: 0)
         result = 31 * result + (contact?.hashCode() ?: 0)
         return result
+    }
+
+    override fun toString(): String {
+        return "Company(id=$id, name=$name, commercialAgreement=$commercialAgreement, companyNote=$companyNote, contact=$contact)"
     }
 }
